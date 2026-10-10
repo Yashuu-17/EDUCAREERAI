@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="55%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Background Plate -->
+  <rect width="100" height="100" rx="24" fill="#0b0f19" />
+  <rect width="98" height="98" x="1" y="1" rx="23" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.3" fill="none" />
+
+  <!-- Outer Framing Side Bars -->
+  <path d="M 18 26 L 14 26 L 14 70 L 18 70" stroke="url(#bookGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M 82 26 L 86 26 L 86 70 L 82 70" stroke="url(#bookGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Bottom Page Flare / Edge -->
+  <path d="M 18 75 C 29 82 40 83 50 78 C 60 83 71 82 82 75" stroke="url(#bookGrad)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Main Open Book Outline -->
+  <path d="M 50 28 C 40 21 29 20 20 22 L 20 69 C 29 67 40 69 50 76 C 60 69 71 67 80 69 L 80 22 C 71 20 60 21 50 28 Z" 
+        stroke="url(#bookGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Center Spine Fold -->
+  <line x1="50" y1="28" x2="50" y2="76" stroke="url(#bookGrad)" stroke-width="2.8" stroke-linecap="round" />
+
+  <!-- Left Page: Letter "E" -->
+  <path d="M 43 35 L 28 35 L 28 62 L 43 62" stroke="url(#bookGrad)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="28" y1="48.5" x2="39" y2="48.5" stroke="url(#bookGrad)" stroke-width="3.4" stroke-linecap="round" />
+
+  <!-- Right Page: Lower Career Growth Arrow -->
+  <path d="M 50 71 C 54 60 60 52 67 44" stroke="url(#arrowGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <polygon points="72,39 62,42 67,49" fill="url(#arrowGrad)" />
+
+  <!-- Right Page: Upper Career Growth Arrow -->
+  <path d="M 58 43 C 63 36 68 29 74 21" stroke="url(#arrowGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <polygon points="79,17 69,20 74,27" fill="url(#arrowGrad)" />
+</svg>

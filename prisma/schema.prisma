@@ -1,0 +1,178 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String            @id @default(uuid())
+  name              String
+  email             String            @unique
+  password          String
+  college           String?           @default("")
+  department        String?           @default("CSE")
+  yearSemester      String?           @default("3rd Year / 5th Sem")
+  careerGoal        String?           @default("IT") // "IT" or "Non-IT"
+  skillLevel        String?           @default("Beginner") // "Beginner", "Intermediate", "Advanced"
+  preferredLanguage String?           @default("English") // "English", "Hindi", "Telugu"
+  role              String            @default("student")
+  streak            Int               @default(1)
+  lastActive        DateTime          @default(now())
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  enrollments       CourseEnrollment[]
+  lessonProgress    LessonProgress[]
+  quizAttempts      QuizAttempt[]
+  roadmapProgress   RoadmapProgress[]
+  resumes           Resume[]
+  chatMessages      ChatMessage[]
+  resumeAnalyses    ResumeAnalysis[]
+  dailyActivities   DailyActivity[]
+}
+
+model Course {
+  id              String             @id @default(uuid())
+  slug            String             @unique
+  title           String
+  description     String
+  category        String             // "PROGRAMMING_LANGUAGES", "AI_DATA", "MATHEMATICS", "BTECH_DEPARTMENTS", "CAREER_SOFT_SKILLS"
+  department      String?            // CSE, IT, ECE, EEE, MECH, CIVIL, etc.
+  domain          String?            // AI, ML, Web, Embedded, etc.
+  language        String?            // Python, C++, etc.
+  level           String             // "Beginner", "Intermediate", "Advanced"
+  prerequisites   String?            @default("")
+  estimatedHours  Int                @default(10)
+  miniProject     String?            @default("")
+  modulesJson     String             // JSON string storing modules, lessons, resources
+  createdAt       DateTime           @default(now())
+
+  enrollments     CourseEnrollment[]
+  lessonProgress  LessonProgress[]
+}
+
+model CourseEnrollment {
+  id              String    @id @default(uuid())
+  userId          String
+  courseId        String
+  progressPercent Float     @default(0)
+  enrolledAt      DateTime  @default(now())
+  lastAccessed    DateTime  @default(now())
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course          Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String    @id @default(uuid())
+  userId      String
+  courseId    String
+  lessonId    String
+  completed   Boolean   @default(false)
+  isWatched   Boolean   @default(false)
+  completedAt DateTime?
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId, lessonId])
+}
+
+model DailyActivity {
+  id               String   @id @default(uuid())
+  userId           String
+  date             String   // "YYYY-MM-DD"
+  minutesSpent     Int      @default(0)
+  lessonsCompleted Int      @default(0)
+  quizzesTaken     Int      @default(0)
+  score            Float    @default(0)
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model RoadmapProgress {
+  id              String   @id @default(uuid())
+  userId          String
+  roadmapSlug     String
+  completedNodes  String   @default("[]") // JSON string array of node IDs
+  progressPercent Float    @default(0)
+  updatedAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roadmapSlug])
+}
+
+model QuizAttempt {
+  id             String   @id @default(uuid())
+  userId         String
+  category       String
+  topic          String
+  score          Int
+  totalQuestions Int
+  percentage     Float
+  weakTopics     String   @default("[]") // JSON string array
+  wrongAnswers   String   @default("[]") // JSON string of review details
+  createdAt      DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  role      String   // "user" or "assistant"
+  content   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Resume {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  targetRole  String
+  templateId  String   @default("modern-ats")
+  resumeData  String   // JSON string containing all sections
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ResumeAnalysis {
+  id              String   @id @default(uuid())
+  userId          String
+  fileName        String
+  targetRole      String
+  atsScore        Int
+  breakdownJson   String   // JSON string
+  missingSections String   // JSON array string
+  missingKeywords String   // JSON array string
+  weakBullets     String   // JSON array string
+  skillGaps       String   // JSON array string with course links
+  suggestions     String   // JSON array string
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model YouTubeResource {
+  id          String   @id @default(uuid())
+  channelName String
+  category    String   // PROGRAMMING, AI_ML, DEVOPS, etc.
+  topic       String
+  language    String   // English, Hindi, Telugu
+  level       String   // Beginner, Intermediate, Advanced, All
+  channelUrl  String
+}
